@@ -9,7 +9,7 @@ import scipy.signal as signal
 import sounddevice as sd
 import threading
 
-#将data中的数据保存到名为filename的WAV文件中
+#save data to filename.WAV
 def save_wave_file(filename, data): 
     wf = wave.open(filename, 'wb') 
     wf.setnchannels(1) 
@@ -20,13 +20,13 @@ def save_wave_file(filename, data):
 
 
 def test():
-    NUM_SAMPLES = 50000     # pyAudio内部缓存的块的大小
+    NUM_SAMPLES = 50000     # Size of internally cached blocks
     P_NUM=300
     data_l=NUM_SAMPLES-P_NUM
-    SAMPLING_RATE = 44100    # 取样频率
+    SAMPLING_RATE = 44100    # sampling rate
     COUNT_NUM = 0#20          
 
-    # 开启声音输入
+    # start recording
     print"record is  beginning!"
     pa = PyAudio()
     stream = pa.open(format=paInt16, channels=1, rate=SAMPLING_RATE, input=True, 
@@ -36,9 +36,9 @@ def test():
     save_buffer = [] 
 
     while True: 
-        # 读入NUM_SAMPLES个取样
+        # read the samples   NUM_SAMPLES
         string_audio_data = stream.read(NUM_SAMPLES) 
-        # 将读入的数据转换为数组
+        # change the data to an array
         audio_data = np.fromstring(string_audio_data, dtype=np.short) 
         p_data=audio_data[P_NUM:NUM_SAMPLES]
         ap_data=p_data*signal.hann(data_l,sym=0)
@@ -72,7 +72,7 @@ def test():
         else:
             print "No moving is detected"
 
-        # 绘图
+        # plot
         pl.subplot(211)
         pl.plot(time,p_data)
         pl.subplot(212)
